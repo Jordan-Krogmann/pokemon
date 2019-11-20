@@ -1,0 +1,18 @@
+---
+title: "Pokemon"
+output: html_notebook
+---
+
+# Set Up & Data Pull
+
+Dev Needs
++ pull sprites 
+
+```{r load-packages}
+library(tidyverse)
+```
+
+```{r data-pull}
+pokemon_df <- read_csv(file = here::here("data","pokemon.csv"))
+```
+
