@@ -1757,19 +1757,6 @@ summary {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
 <pre class="r"><code>library(tidyverse)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2Qgb3ZlcndyaXR0ZW4gYnkgJ2RwbHlyJzpcbiAgbWV0aG9kICAgICAgICAgICBmcm9tXG4gIHByaW50LnJvd3dpc2VfZGYgICAgIFxuXHUwMDFiWzM3bS0tIFx1MDAxYlsxbUF0dGFjaGluZyBwYWNrYWdlc1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZSAxLjIuMSAtLVx1MDAxYlszOW1cblx1MDAxYlszN21cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bWdncGxvdDJcdTAwMWJbMzdtIDMuMi4xICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXB1cnJyICBcdTAwMWJbMzdtIDAuMy4zXG5cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXRpYmJsZSBcdTAwMWJbMzdtIDIuMS4zICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bWRwbHlyICBcdTAwMWJbMzdtIDAuOC4zXG5cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXRpZHlyICBcdTAwMWJbMzdtIDEuMC4wICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXN0cmluZ3JcdTAwMWJbMzdtIDEuNC4wXG5cdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bXJlYWRyICBcdTAwMWJbMzdtIDEuMy4xICAgICBcdTAwMWJbMzJtdlx1MDAxYlszN20gXHUwMDFiWzM0bWZvcmNhdHNcdTAwMWJbMzdtIDAuNC4wXHUwMDFiWzM5bVxuXHUwMDFiWzM3bS0tIFx1MDAxYlsxbUNvbmZsaWN0c1x1MDAxYlsyMm0gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tIHRpZHl2ZXJzZV9jb25mbGljdHMoKSAtLVxuXHUwMDFiWzMxbXhcdTAwMWJbMzdtIFx1MDAxYlszNG1kcGx5clx1MDAxYlszN206Olx1MDAxYlszMm1maWx0ZXIoKVx1MDAxYlszN20gbWFza3MgXHUwMDFiWzM0bXN0YXRzXHUwMDFiWzM3bTo6ZmlsdGVyKClcblx1MDAxYlszMW14XHUwMDFiWzM3bSBcdTAwMWJbMzRtZHBseXJcdTAwMWJbMzdtOjpcdTAwMWJbMzJtbGFnKClcdTAwMWJbMzdtICAgIG1hc2tzIFx1MDAxYlszNG1zdGF0c1x1MDAxYlszN206OmxhZygpXHUwMDFiWzM5bVxuIn0= -->
-<pre><code>Registered S3 method overwritten by &#39;dplyr&#39;:
-  method           from
-  print.rowwise_df     
-[37m-- [1mAttaching packages[22m --------------------------------------- tidyverse 1.2.1 --[39m
-[37m[32mv[37m [34mggplot2[37m 3.2.1     [32mv[37m [34mpurrr  [37m 0.3.3
-[32mv[37m [34mtibble [37m 2.1.3     [32mv[37m [34mdplyr  [37m 0.8.3
-[32mv[37m [34mtidyr  [37m 1.0.0     [32mv[37m [34mstringr[37m 1.4.0
-[32mv[37m [34mreadr  [37m 1.3.1     [32mv[37m [34mforcats[37m 0.4.0[39m
-[37m-- [1mConflicts[22m ------------------------------------------ tidyverse_conflicts() --
-[31mx[37m [34mdplyr[37m::[32mfilter()[37m masks [34mstats[37m::filter()
-[31mx[37m [34mdplyr[37m::[32mlag()[37m    masks [34mstats[37m::lag()[39m</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
@@ -1777,39 +1764,16 @@ summary {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9rZW1vbl9kZiA8LSByZWFkX2NzdihmaWxlID0gaGVyZTo6aGVyZShcImRhdGFcIixcInBva2Vtb24uY3N2XCIpKSAlPiUgYXNfdGliYmxlKClcbmBgYCJ9 -->
 <pre class="r"><code>pokemon_df &lt;- read_csv(file = here::here(&quot;data&quot;,&quot;pokemon.csv&quot;)) %&gt;% as_tibble()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICAuZGVmYXVsdCA9IGNvbF9kb3VibGUoKSxcbiAgYWJpbGl0aWVzID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIGNhcHR1cmVfcmF0ZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBjbGFzc2ZpY2F0aW9uID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIGphcGFuZXNlX25hbWUgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgbmFtZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICB0eXBlMSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICB0eXBlMiA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltXG4pXG5TZWUgc3BlYyguLi4pIGZvciBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9ucy5cbiJ9 -->
-<pre><code>Parsed with column specification:
-cols(
-  .default = col_double(),
-  abilities = [31mcol_character()[39m,
-  capture_rate = [31mcol_character()[39m,
-  classfication = [31mcol_character()[39m,
-  japanese_name = [31mcol_character()[39m,
-  name = [31mcol_character()[39m,
-  type1 = [31mcol_character()[39m,
-  type2 = [31mcol_character()[39m
-)
-See spec(...) for full column specifications.</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW50YXIoXG4gIHRhcmZpbGUgPSBoZXJlOjpoZXJlKFwiaW1nc1wiLCBcImdlbmVyYXRpb24tMS50YXIuZ3pcIiksXG4gIGxpc3QgPSBUUlVFXG4pXG5cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudW50YXIoXG4gIHRhcmZpbGUgPSBoZXJlOjpoZXJlKFwiaW1nc1wiLCBcImdlbmVyYXRpb24tMS50YXIuZ3pcIiksXG4gIGxpc3QgPSBUUlVFXG4pXG5gYGAifQ== -->
 <pre class="r"><code>untar(
   tarfile = here::here(&quot;imgs&quot;, &quot;generation-1.tar.gz&quot;),
   list = TRUE
-)
-</code></pre>
+)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoicnVubmluZyBjb21tYW5kICd0YXIuZXhlIC10ZiBcIkM6L1VzZXJzL2oua3JvZ21hbm4vRGVza3RvcC9wcm9qZWN0X3JlcG9zaXRvcnkvcG9rZW1vbi9pbWdzL2dlbmVyYXRpb24tMS50YXIuZ3pcIicgaGFkIHN0YXR1cyAxXG4ifQ== -->
-<pre><code>running command &#39;tar.exe -tf &quot;C:/Users/j.krogmann/Desktop/project_repository/pokemon/imgs/generation-1.tar.gz&quot;&#39; had status 1</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFwidGFyLmV4ZTogRXJyb3Igb3BlbmluZyBhcmNoaXZlOiBGYWlsZWQgdG8gb3BlbiAnQzovVXNlcnMvai5rcm9nbWFubi9EZXNrdG9wL3Byb2plY3RfcmVwb3NpdG9yeS9wb2tlbW9uL2ltZ3MvZ2VuZXJhdGlvbi0xLnRhci5neidcIlxuYXR0cigsXCJzdGF0dXNcIilcblsxXSAxXG4ifQ== -->
-<pre><code>[1] &quot;tar.exe: Error opening archive: Failed to open &#39;C:/Users/j.krogmann/Desktop/project_repository/pokemon/imgs/generation-1.tar.gz&#39;&quot;
-attr(,&quot;status&quot;)
-[1] 1</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><a href="http://pokemondb.net/pokedex/mew"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAAAAACN7WTCAAABVklEQVRIx+2WS3KFMAwE+5JzybnkZGFhDM+AebukwgZc5S79RhLky4d/8DeCQt+AIskRXQI1ucybcKx3YL9u3roKSWIPJtezCvZg8k0ddQ8KlASgfQXYyDsQJyC3dFjQb5FbsJghk14Cz2RidVD3YM6gqp735ThzU09nWfXgbfOyGeJBciSyG2k1sZCgg+KuwKqHwEoMOsjmylVt4dASaWyfcsa8i0os9bI+BsAVGGS7CmgWZo5adN6eK+4ECtsepeNPPUxAJTaAdBhTjyBdb/USrMxVjcfqxyWLeD+CJPmzflOLLoWL4tqEgpUYK0dIdg0am+eslqSNe3/MSU7zxpS292bk2WK2HthBm7AgOSwhOqiM0/teq41squNSqrNGBlHkKzBBjbSbeNdXOdoWADZiCSym7w1dSIcJJtH3DE1APIyO3dyg9sSTUBf2o3bH///l/hz4A4Xg7KAGyzBLAAAAAElFTkSuQmCC" alt="Mew" /></a></p>
@@ -1830,7 +1794,7 @@ attr(,&quot;status&quot;)
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlBva2Vtb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFNldCBVcCAmIERhdGEgUHVsbA0KDQpEZXYgTmVlZHMNCisgcHVsbCBzcHJpdGVzIA0KICArIGh0dHBzOi8vcG9rZW1vbmRiLm5ldC9zcHJpdGVzDQogICsgaHR0cHM6Ly92ZWVrdW4uY29tL2RleC9kb3dubG9hZHMNCg0KYGBge3IgbG9hZC1wYWNrYWdlc30NCmxpYnJhcnkodGlkeXZlcnNlKQ0KYGBgDQoNCmBgYHtyIGRhdGEtcHVsbH0NCnBva2Vtb25fZGYgPC0gcmVhZF9jc3YoZmlsZSA9IGhlcmU6OmhlcmUoImRhdGEiLCJwb2tlbW9uLmNzdiIpKSAlPiUgYXNfdGliYmxlKCkNCmBgYA0KDQpgYGB7ciBzcHJpdGUtcHVsbH0NCnVudGFyKA0KICB0YXJmaWxlID0gaGVyZTo6aGVyZSgiaW1ncyIsICJnZW5lcmF0aW9uLTEudGFyLmd6IiksDQogIGxpc3QgPSBUUlVFDQopDQpgYGANClshW01ld10oaHR0cHM6Ly9pbWcucG9rZW1vbmRiLm5ldC9zcHJpdGVzL3JlZC1ibHVlL25vcm1hbC9tZXcucG5nKV0oaHR0cDovL3Bva2Vtb25kYi5uZXQvcG9rZWRleC9tZXcpIA0KDQoNCg0KYGBge3IgZWRhfQ0KcG9rZW1vbl9kZiAlPiUgDQogIGdncGxvdChhZXMoeCA9IHdlaWdodF9rZywgeSA9IGhlaWdodF9tKSkgKyANCiAgICBnZW9tX3BvaW50KGFlcyhjb2xvciA9IGFzLmNoYXJhY3RlcihnZW5lcmF0aW9uKSkpICsgDQogICAgZ2VvbV9zbW9vdGgoYWVzKGdyb3VwID0gYXMuY2hhcmFjdGVyKGdlbmVyYXRpb24pLGNvbG9yID0gYXMuY2hhcmFjdGVyKGdlbmVyYXRpb24pKSkgKw0KICAgIGZhY2V0X3dyYXAoLn5hcy5jaGFyYWN0ZXIoZ2VuZXJhdGlvbikpDQpgYGANCg0K</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlBva2Vtb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFNldCBVcCAmIERhdGEgUHVsbA0KDQpEZXYgTmVlZHMNCisgcHVsbCBzcHJpdGVzIA0KICArIGh0dHBzOi8vcG9rZW1vbmRiLm5ldC9zcHJpdGVzDQogICsgaHR0cHM6Ly92ZWVrdW4uY29tL2RleC9kb3dubG9hZHMNCg0KYGBge3IgbG9hZC1wYWNrYWdlc30NCmxpYnJhcnkodGlkeXZlcnNlKQ0KYGBgDQoNCmBgYHtyIGRhdGEtcHVsbH0NCnBva2Vtb25fZGYgPC0gcmVhZF9jc3YoZmlsZSA9IGhlcmU6OmhlcmUoImRhdGEiLCJwb2tlbW9uLmNzdiIpKSAlPiUgYXNfdGliYmxlKCkNCmBgYA0KDQpgYGB7ciBzcHJpdGUtcHVsbH0NCnVudGFyKA0KICB0YXJmaWxlID0gaGVyZTo6aGVyZSgiaW1ncyIsICJnZW5lcmF0aW9uLTEudGFyLmd6IiksDQogIGxpc3QgPSBUUlVFDQopDQpgYGANCg0KDQoNClshW01ld10oaHR0cHM6Ly9pbWcucG9rZW1vbmRiLm5ldC9zcHJpdGVzL3JlZC1ibHVlL25vcm1hbC9tZXcucG5nKV0oaHR0cDovL3Bva2Vtb25kYi5uZXQvcG9rZWRleC9tZXcpIA0KDQoNCg0KYGBge3IgZWRhfQ0KcG9rZW1vbl9kZiAlPiUgDQogIGdncGxvdChhZXMoeCA9IHdlaWdodF9rZywgeSA9IGhlaWdodF9tKSkgKyANCiAgICBnZW9tX3BvaW50KGFlcyhjb2xvciA9IGFzLmNoYXJhY3RlcihnZW5lcmF0aW9uKSkpICsgDQogICAgZ2VvbV9zbW9vdGgoYWVzKGdyb3VwID0gYXMuY2hhcmFjdGVyKGdlbmVyYXRpb24pLGNvbG9yID0gYXMuY2hhcmFjdGVyKGdlbmVyYXRpb24pKSkgKw0KICAgIGZhY2V0X3dyYXAoLn5hcy5jaGFyYWN0ZXIoZ2VuZXJhdGlvbikpDQpgYGANCg0K</div>
 
 
 
