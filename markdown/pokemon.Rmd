@@ -24,6 +24,7 @@ pokemon_df <- read_csv(file = here::here("data","pokemon.csv")) %>% as_tibble()
 pokemon_df %>% 
   ggplot(aes(x = weight_kg, y = height_m)) + 
     geom_point(aes(color = as.character(generation))) + 
-    geom_smooth(aes(group = as.character(generation),color = as.character(generation)))
+    geom_smooth(aes(group = as.character(generation),color = as.character(generation))) +
+    facet_wrap(.~as.character(generation))
 ```
 
