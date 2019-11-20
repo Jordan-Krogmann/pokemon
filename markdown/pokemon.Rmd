@@ -7,12 +7,23 @@ output: html_notebook
 
 Dev Needs
 + pull sprites 
+  + https://pokemondb.net/sprites
+  + https://veekun.com/dex/downloads
 
 ```{r load-packages}
 library(tidyverse)
 ```
 
 ```{r data-pull}
-pokemon_df <- read_csv(file = here::here("data","pokemon.csv"))
+pokemon_df <- read_csv(file = here::here("data","pokemon.csv")) %>% as_tibble()
+```
+
+
+
+```{r eda}
+pokemon_df %>% 
+  ggplot(aes(x = weight_kg, y = height_m)) + 
+    geom_point(aes(color = as.character(generation))) + 
+    geom_smooth(aes(group = as.character(generation),color = as.character(generation)))
 ```
 
