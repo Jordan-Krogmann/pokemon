@@ -14,22 +14,15 @@ Dev Needs
 library(tidyverse)
 ```
 
-```{r data-pull}
+```{r data-pull, message=FALSE}
 pokemon_df <- read_csv(file = here::here("data","pokemon.csv")) %>% as_tibble()
 ```
 
 ```{r sprite-pull}
-untar(
-  tarfile = here::here("imgs", "generation-1.tar.gz"),
-  list = TRUE
-)
+
 ```
 
-
-
 [![Mew](https://img.pokemondb.net/sprites/red-blue/normal/mew.png)](http://pokemondb.net/pokedex/mew) 
-
-
 
 ```{r eda}
 pokemon_df %>% 
