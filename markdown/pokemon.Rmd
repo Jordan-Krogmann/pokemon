@@ -3,32 +3,120 @@ title: "Pokemon"
 output: html_notebook
 ---
 
+[![Mew](https://img.pokemondb.net/sprites/red-blue/normal/mew.png)](http://pokemondb.net/pokedex/mew)
+
+
 # Set Up & Data Pull
 
 Dev Needs
+
 + pull sprites 
   + https://pokemondb.net/sprites
   + https://veekun.com/dex/downloads
+  
++ model
+  + 
+  
 
-```{r load-packages}
-library(tidyverse)
+```{r load-packages , message=FALSE, warning=FALSE}
+library(tidymodels)# tidy model framework
+library(tidyverse) # plotting and data manipulation
+library(DALEX)     # easy model interpretation
+library(gt)
 ```
 
-```{r data-pull, message=FALSE}
-pokemon_df <- read_csv(file = here::here("data","pokemon.csv")) %>% as_tibble()
+```{r data-pull, message=FALSE, warning=FALSE}
+pokemon_df <- read_csv(file = here::here("data","pokemon.csv")) %>% 
+  as_tibble() %>% 
+  mutate(type2 = case_when(
+    
+    is.na(type2)~ "none",
+    TRUE ~ type2
+    )
+  )
 ```
 
-```{r sprite-pull}
+## EDA
 
-```
+To mimic their project I guess they use tree-based models to predict wether or not a Pokemon is legendary.
 
-[![Mew](https://img.pokemondb.net/sprites/red-blue/normal/mew.png)](http://pokemondb.net/pokedex/mew) 
+It seems they got legendary happy in the 7-generation of Pokemon... Not sure what games those are since I haven't played since *Pokemon Red*.
 
-```{r eda}
+```{r generation-legendary}
 pokemon_df %>% 
-  ggplot(aes(x = weight_kg, y = height_m)) + 
-    geom_point(aes(color = as.character(generation))) + 
-    geom_smooth(aes(group = as.character(generation),color = as.character(generation))) +
-    facet_wrap(.~as.character(generation))
+  group_by(generation) %>% 
+  summarise(
+    count_total = n(),
+    count_legendary = sum(is_legendary),
+    percent_legendary = sum(is_legendary)/ n()
+  ) %>% 
+  gt() %>% 
+  fmt_percent(
+    columns = vars(percent_legendary),
+    decimals = 1
+  ) %>% 
+  tab_header(
+    title = md("**Legendary Pokemon by Generation**"),
+    subtitle = md("Does not include *Sword & Shield*")
+  ) 
 ```
+
+
+If you look at legendary count type one it looks like 
+```{r type-legendary}
+pokemon_df %>% 
+  group_by(type1) %>% 
+  summarise(
+    count_total = n(),
+    count_legendary = sum(is_legendary),
+    percent_legendary = sum(is_legendary)/ n()
+  ) %>% 
+  arrange(percent_legendary) %>% 
+  gt() %>% 
+  fmt_percent(
+    columns = vars(percent_legendary),
+    decimals = 1
+  ) %>% 
+  tab_header(
+    title = md("**Legendary Pokemon by Type1**"),
+    subtitle = md("Does not include *Sword & Shield*")
+  ) 
+
+pokemon_df %>% 
+  group_by(type2) %>% 
+  summarise(
+    count_total = n(),
+    count_legendary = sum(is_legendary),
+    percent_legendary = sum(is_legendary)/ n()
+  ) %>% 
+  arrange(percent_legendary) %>% 
+  gt() %>% 
+  fmt_percent(
+    columns = vars(percent_legendary),
+    decimals = 1
+  ) %>% 
+  tab_header(
+    title = md("**Legendary Pokemon by Type2**"),
+    subtitle = md("Does not include *Sword & Shield*")
+  ) 
+```
+
+## Modeling
+
+
+
+```{r modeling-data}
+# training data frame
+train_df <- pokemon_df %>% filter(generation != 7)
+
+# testing data frame
+test_df <- pokemon_df %>% filter(generation == 7)
+```
+
+```{r model-recipe}
+
+```
+
+
+
 

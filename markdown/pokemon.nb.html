@@ -1749,13 +1749,28 @@ summary {
 
 
 <!-- rnb-text-begin -->
+<p><a href="http://pokemondb.net/pokedex/mew"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAAAAACN7WTCAAABVklEQVRIx+2WS3KFMAwE+5JzybnkZGFhDM+AebukwgZc5S79RhLky4d/8DeCQt+AIskRXQI1ucybcKx3YL9u3roKSWIPJtezCvZg8k0ddQ8KlASgfQXYyDsQJyC3dFjQb5FbsJghk14Cz2RidVD3YM6gqp735ThzU09nWfXgbfOyGeJBciSyG2k1sZCgg+KuwKqHwEoMOsjmylVt4dASaWyfcsa8i0os9bI+BsAVGGS7CmgWZo5adN6eK+4ECtsepeNPPUxAJTaAdBhTjyBdb/USrMxVjcfqxyWLeD+CJPmzflOLLoWL4tqEgpUYK0dIdg0am+eslqSNe3/MSU7zxpS292bk2WK2HthBm7AgOSwhOqiM0/teq41squNSqrNGBlHkKzBBjbSbeNdXOdoWADZiCSym7w1dSIcJJtH3DE1APIyO3dyg9sSTUBf2o3bH///l/hz4A4Xg7KAGyzBLAAAAAElFTkSuQmCC" alt="Mew" /></a></p>
 <div id="set-up-data-pull" class="section level1">
 <h1>Set Up &amp; Data Pull</h1>
-<p>Dev Needs + pull sprites + <a href="https://pokemondb.net/sprites" class="uri">https://pokemondb.net/sprites</a> + <a href="https://veekun.com/dex/downloads" class="uri">https://veekun.com/dex/downloads</a></p>
+<p>Dev Needs</p>
+<ul>
+<li>pull sprites
+<ul>
+<li><a href="https://pokemondb.net/sprites" class="uri">https://pokemondb.net/sprites</a></li>
+<li><a href="https://veekun.com/dex/downloads" class="uri">https://veekun.com/dex/downloads</a></li>
+</ul></li>
+<li>model
+<ul>
+<li></li>
+</ul></li>
+</ul>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
-<pre class="r"><code>library(tidyverse)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5bW9kZWxzKSMgdGlkeSBtb2RlbCBmcmFtZXdvcmtcbmxpYnJhcnkodGlkeXZlcnNlKSAjIHBsb3R0aW5nIGFuZCBkYXRhIG1hbmlwdWxhdGlvblxubGlicmFyeShEQUxFWCkgICAgICMgZWFzeSBtb2RlbCBpbnRlcnByZXRhdGlvblxubGlicmFyeShndClcbmBgYCJ9 -->
+<pre class="r"><code>library(tidymodels)# tidy model framework
+library(tidyverse) # plotting and data manipulation
+library(DALEX)     # easy model interpretation
+library(gt)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1764,47 +1779,1759 @@ summary {
 <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9rZW1vbl9kZiA8LSByZWFkX2NzdihmaWxlID0gaGVyZTo6aGVyZShcImRhdGFcIixcInBva2Vtb24uY3N2XCIpKSAlPiUgYXNfdGliYmxlKClcbmBgYCJ9 -->
 <pre class="r"><code>pokemon_df &lt;- read_csv(file = here::here(&quot;data&quot;,&quot;pokemon.csv&quot;)) %&gt;% as_tibble()</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUGFyc2VkIHdpdGggY29sdW1uIHNwZWNpZmljYXRpb246XG5jb2xzKFxuICAuZGVmYXVsdCA9IGNvbF9kb3VibGUoKSxcbiAgYWJpbGl0aWVzID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIGNhcHR1cmVfcmF0ZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICBjbGFzc2ZpY2F0aW9uID0gXHUwMDFiWzMxbWNvbF9jaGFyYWN0ZXIoKVx1MDAxYlszOW0sXG4gIGphcGFuZXNlX25hbWUgPSBcdTAwMWJbMzFtY29sX2NoYXJhY3RlcigpXHUwMDFiWzM5bSxcbiAgbmFtZSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICB0eXBlMSA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltLFxuICB0eXBlMiA9IFx1MDAxYlszMW1jb2xfY2hhcmFjdGVyKClcdTAwMWJbMzltXG4pXG5TZWUgc3BlYyguLi4pIGZvciBmdWxsIGNvbHVtbiBzcGVjaWZpY2F0aW9ucy5cbiJ9 -->
-<pre><code>Parsed with column specification:
-cols(
-  .default = col_double(),
-  abilities = [31mcol_character()[39m,
-  capture_rate = [31mcol_character()[39m,
-  classfication = [31mcol_character()[39m,
-  japanese_name = [31mcol_character()[39m,
-  name = [31mcol_character()[39m,
-  type1 = [31mcol_character()[39m,
-  type2 = [31mcol_character()[39m
-)
-See spec(...) for full column specifications.</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<div id="eda" class="section level2">
+<h2>EDA</h2>
+<p>To mimic their project I guess they use tree-based models to predict wether or not a Pokemon is legendary.</p>
+<p>It seems they got legendary happy in the 7-generation of Pokemon… Not sure what games those are since I haven’t played since <em>Pokemon Red</em>.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-chunk-end -->
-<!-- rnb-text-begin -->
-<p><a href="http://pokemondb.net/pokedex/mew"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAAAAACN7WTCAAABVklEQVRIx+2WS3KFMAwE+5JzybnkZGFhDM+AebukwgZc5S79RhLky4d/8DeCQt+AIskRXQI1ucybcKx3YL9u3roKSWIPJtezCvZg8k0ddQ8KlASgfQXYyDsQJyC3dFjQb5FbsJghk14Cz2RidVD3YM6gqp735ThzU09nWfXgbfOyGeJBciSyG2k1sZCgg+KuwKqHwEoMOsjmylVt4dASaWyfcsa8i0os9bI+BsAVGGS7CmgWZo5adN6eK+4ECtsepeNPPUxAJTaAdBhTjyBdb/USrMxVjcfqxyWLeD+CJPmzflOLLoWL4tqEgpUYK0dIdg0am+eslqSNe3/MSU7zxpS292bk2WK2HthBm7AgOSwhOqiM0/teq41squNSqrNGBlHkKzBBjbSbeNdXOdoWADZiCSym7w1dSIcJJtH3DE1APIyO3dyg9sSTUBf2o3bH///l/hz4A4Xg7KAGyzBLAAAAAElFTkSuQmCC" alt="Mew" /></a></p>
-<!-- rnb-text-end -->
-<!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuYGBgclxucG9rZW1vbl9kZiAlPiUgXG4gIGdncGxvdChhZXMoeCA9IHdlaWdodF9rZywgeSA9IGhlaWdodF9tKSkgKyBcbiAgICBnZW9tX3BvaW50KGFlcyhjb2xvciA9IGFzLmNoYXJhY3RlcihnZW5lcmF0aW9uKSkpICsgXG4gICAgZ2VvbV9zbW9vdGgoYWVzKGdyb3VwID0gYXMuY2hhcmFjdGVyKGdlbmVyYXRpb24pLGNvbG9yID0gYXMuY2hhcmFjdGVyKGdlbmVyYXRpb24pKSkgK1xuICAgIGZhY2V0X3dyYXAoLn5hcy5jaGFyYWN0ZXIoZ2VuZXJhdGlvbikpXG5gYGBcbmBgYCJ9 -->
-<pre class="r"><code>```r
-pokemon_df %&gt;% 
-  ggplot(aes(x = weight_kg, y = height_m)) + 
-    geom_point(aes(color = as.character(generation))) + 
-    geom_smooth(aes(group = as.character(generation),color = as.character(generation))) +
-    facet_wrap(.~as.character(generation))</code></pre>
-<p>```</p>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9rZW1vbl9kZiAlPiUgXG4gIGdyb3VwX2J5KGdlbmVyYXRpb24pICU+JSBcbiAgc3VtbWFyaXNlKFxuICAgIGNvdW50X3RvdGFsID0gbigpLFxuICAgIGNvdW50X2xlZ2VuZGFyeSA9IHN1bShpc19sZWdlbmRhcnkpLFxuICAgIHBlcmNlbnRfbGVnZW5kYXJ5ID0gc3VtKGlzX2xlZ2VuZGFyeSkvIG4oKVxuICApICU+JSBcbiAgZ3QoKSAlPiUgXG4gIGZtdF9wZXJjZW50KFxuICAgIGNvbHVtbnMgPSB2YXJzKHBlcmNlbnRfbGVnZW5kYXJ5KSxcbiAgICBkZWNpbWFscyA9IDFcbiAgKSAlPiUgXG4gIHRhYl9oZWFkZXIoXG4gICAgdGl0bGUgPSBtZChcIioqTGVnZW5kYXJ5IFBva2Vtb24gYnkgR2VuZXJhdGlvbioqXCIpLFxuICAgIHN1YnRpdGxlID0gbWQoXCJEb2VzIG5vdCBpbmNsdWRlICpTd29yZCAmIFNoaWVsZCpcIilcbiAgKSBcbmBgYCJ9 -->
+<pre class="r"><code>pokemon_df %&gt;% 
+  group_by(generation) %&gt;% 
+  summarise(
+    count_total = n(),
+    count_legendary = sum(is_legendary),
+    percent_legendary = sum(is_legendary)/ n()
+  ) %&gt;% 
+  gt() %&gt;% 
+  fmt_percent(
+    columns = vars(percent_legendary),
+    decimals = 1
+  ) %&gt;% 
+  tab_header(
+    title = md(&quot;**Legendary Pokemon by Generation**&quot;),
+    subtitle = md(&quot;Does not include *Sword &amp; Shield*&quot;)
+  ) </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-plot-begin -->
-<p><img src="data:image/png;base64,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" /></p>
-<!-- rnb-plot-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInNoaW55LnRhZy5saXN0IiwibGlzdCJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#arcunzqqhy .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  /* table.margin.left */
+  margin-right: auto;
+  /* table.margin.right */
+  color: #333333;
+  font-size: 16px;
+  /* table.font.size */
+  background-color: #FFFFFF;
+  /* table.background.color */
+  width: auto;
+  /* table.width */
+  border-top-style: solid;
+  /* table.border.top.style */
+  border-top-width: 2px;
+  /* table.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table.border.top.color */
+  border-bottom-style: solid;
+  /* table.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* table.border.bottom.color */
+}
+
+#arcunzqqhy .gt_heading {
+  background-color: #FFFFFF;
+  /* heading.background.color */
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-left-style: hidden;
+  /* heading.border.lr.style */
+  border-left-width: 1px;
+  /* heading.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* heading.border.lr.color */
+  border-right-style: hidden;
+  /* heading.border.lr.style */
+  border-right-width: 1px;
+  /* heading.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* heading.border.lr.color */
+}
+
+#arcunzqqhy .gt_title {
+  color: #333333;
+  font-size: 125%;
+  /* heading.title.font.size */
+  font-weight: initial;
+  /* heading.title.font.weight */
+  padding-top: 4px;
+  /* heading.top.padding - not yet used */
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-bottom-width: 0;
+}
+
+#arcunzqqhy .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  /* heading.subtitle.font.size */
+  font-weight: initial;
+  /* heading.subtitle.font.weight */
+  padding-top: 0;
+  padding-bottom: 4px;
+  /* heading.bottom.padding - not yet used */
+  border-top-color: #FFFFFF;
+  /* table.background.color */
+  border-top-width: 0;
+}
+
+#arcunzqqhy .gt_bottom_border {
+  border-bottom-style: solid;
+  /* heading.border.bottom.style */
+  border-bottom-width: 2px;
+  /* heading.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* heading.border.bottom.color */
+}
+
+#arcunzqqhy .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#arcunzqqhy .gt_col_headings {
+  border-top-style: solid;
+  /* column_labels.border.top.style */
+  border-top-width: 2px;
+  /* column_labels.border.top.width */
+  border-top-color: #D3D3D3;
+  /* column_labels.border.top.color */
+  border-bottom-style: solid;
+  /* column_labels.border.bottom.style */
+  border-bottom-width: 2px;
+  /* column_labels.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* column_labels.border.bottom.color */
+  border-left-style: none;
+  /* column_labels.border.lr.style */
+  border-left-width: 1px;
+  /* column_labels.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+  border-right-style: none;
+  /* column_labels.border.lr.style */
+  border-right-width: 1px;
+  /* column_labels.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+}
+
+#arcunzqqhy .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* column_labels.background.color */
+  font-size: 100%;
+  /* column_labels.font.size */
+  font-weight: initial;
+  /* column_labels.font.weight */
+  text-transform: inherit;
+  /* column_labels.text_transform */
+  vertical-align: middle;
+  padding: 5px;
+  margin: 10px;
+  overflow-x: hidden;
+}
+
+#arcunzqqhy .gt_sep_right {
+  border-right: 5px solid #FFFFFF;
+}
+
+#arcunzqqhy .gt_group_heading {
+  padding: 8px;
+  /* row_group.padding */
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  text-transform: inherit;
+  /* row_group.text_transform */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  border-left-style: none;
+  /* row_group.border.left.style */
+  border-left-width: 1px;
+  /* row_group.border.left.width */
+  border-left-color: #D3D3D3;
+  /* row_group.border.left.color */
+  border-right-style: none;
+  /* row_group.border.right.style */
+  border-right-width: 1px;
+  /* row_group.border.right.width */
+  border-right-color: #D3D3D3;
+  /* row_group.border.right.color */
+  vertical-align: middle;
+}
+
+#arcunzqqhy .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#arcunzqqhy .gt_striped {
+  background-color: #8080800D;
+  /* row.striping.background_color */
+}
+
+#arcunzqqhy .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#arcunzqqhy .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#arcunzqqhy .gt_row {
+  padding-top: 8px;
+  /* data_row.padding */
+  padding-bottom: 8px;
+  /* data_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  /* table_body.hlines.style */
+  border-top-width: 1px;
+  /* table_body.hlines.width */
+  border-top-color: #D3D3D3;
+  /* table_body.hlines.color */
+  border-left-style: none;
+  /* table_body.vlines.style */
+  border-left-width: 1px;
+  /* table_body.vlines.width */
+  border-left-color: #D3D3D3;
+  /* table_body.vlines.color */
+  border-right-style: none;
+  /* table_body.vlines.style */
+  border-right-width: 1px;
+  /* table_body.vlines.width */
+  border-right-color: #D3D3D3;
+  /* table_body.vlines.color */
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#arcunzqqhy .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* stub.background.color */
+  font-weight: initial;
+  /* stub.font.weight */
+  text-transform: inherit;
+  /* stub.text_transform */
+  border-right-style: solid;
+  /* stub.border.style */
+  border-right-width: 2px;
+  /* stub.border.width */
+  border-right-color: #D3D3D3;
+  /* stub.border.color */
+  padding-left: 12px;
+}
+
+#arcunzqqhy .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* summary_row.background.color */
+  text-transform: inherit;
+  /* summary_row.text_transform */
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#arcunzqqhy .gt_first_summary_row {
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  /* summary_row.border.style */
+  border-top-width: 2px;
+  /* summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* summary_row.border.color */
+}
+
+#arcunzqqhy .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* grand_summary_row.background.color */
+  text-transform: inherit;
+  /* grand_summary_row.text_transform */
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#arcunzqqhy .gt_first_grand_summary_row {
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  /* grand_summary_row.border.style */
+  border-top-width: 6px;
+  /* grand_summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* grand_summary_row.border.color */
+}
+
+#arcunzqqhy .gt_table_body {
+  border-top-style: solid;
+  /* table_body.border.top.style */
+  border-top-width: 2px;
+  /* table_body.border.top.width */
+  border-top-color: #D3D3D3;
+  /* table_body.border.top.color */
+  border-bottom-style: solid;
+  /* table_body.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table_body.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* table_body.border.bottom.color */
+}
+
+#arcunzqqhy .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* footnotes.background.color */
+  border-bottom-style: none;
+  /* footnotes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* footnotes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* footnotes.border.bottom.color */
+  border-left-style: none;
+  /* footnotes.border.lr.color */
+  border-left-width: 2px;
+  /* footnotes.border.lr.color */
+  border-left-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+  border-right-style: none;
+  /* footnotes.border.lr.color */
+  border-right-width: 2px;
+  /* footnotes.border.lr.color */
+  border-right-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+}
+
+#arcunzqqhy .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  /* footnotes.font.size */
+  padding: 4px;
+  /* footnotes.padding */
+}
+
+#arcunzqqhy .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* source_notes.background.color */
+  border-bottom-style: none;
+  /* source_notes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* source_notes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* source_notes.border.bottom.color */
+  border-left-style: none;
+  /* source_notes.border.lr.style */
+  border-left-width: 2px;
+  /* source_notes.border.lr.style */
+  border-left-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+  border-right-style: none;
+  /* source_notes.border.lr.style */
+  border-right-width: 2px;
+  /* source_notes.border.lr.style */
+  border-right-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+}
+
+#arcunzqqhy .gt_sourcenote {
+  font-size: 90%;
+  /* source_notes.font.size */
+  padding: 4px;
+  /* source_notes.padding */
+}
+
+#arcunzqqhy .gt_left {
+  text-align: left;
+}
+
+#arcunzqqhy .gt_center {
+  text-align: center;
+}
+
+#arcunzqqhy .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#arcunzqqhy .gt_font_normal {
+  font-weight: normal;
+}
+
+#arcunzqqhy .gt_font_bold {
+  font-weight: bold;
+}
+
+#arcunzqqhy .gt_font_italic {
+  font-style: italic;
+}
+
+#arcunzqqhy .gt_super {
+  font-size: 65%;
+}
+
+#arcunzqqhy .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="arcunzqqhy" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="4" class="gt_heading gt_title gt_font_normal gt_center" style><strong>Legendary Pokemon by Generation</strong></th>
+    </tr>
+    <tr>
+      <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_center gt_bottom_border" style>Does not include <em>Sword &amp; Shield</em></th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">generation</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">count_total</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">count_legendary</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">percent_legendary</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_right">1</td>
+      <td class="gt_row gt_center">151</td>
+      <td class="gt_row gt_right">5</td>
+      <td class="gt_row gt_right">3.3&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right gt_striped">2</td>
+      <td class="gt_row gt_center gt_striped">100</td>
+      <td class="gt_row gt_right gt_striped">6</td>
+      <td class="gt_row gt_right gt_striped">6.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">3</td>
+      <td class="gt_row gt_center">135</td>
+      <td class="gt_row gt_right">10</td>
+      <td class="gt_row gt_right">7.4&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right gt_striped">4</td>
+      <td class="gt_row gt_center gt_striped">107</td>
+      <td class="gt_row gt_right gt_striped">13</td>
+      <td class="gt_row gt_right gt_striped">12.1&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">5</td>
+      <td class="gt_row gt_center">156</td>
+      <td class="gt_row gt_right">13</td>
+      <td class="gt_row gt_right">8.3&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right gt_striped">6</td>
+      <td class="gt_row gt_center gt_striped">72</td>
+      <td class="gt_row gt_right gt_striped">6</td>
+      <td class="gt_row gt_right gt_striped">8.3&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_right">7</td>
+      <td class="gt_row gt_center">80</td>
+      <td class="gt_row gt_right">17</td>
+      <td class="gt_row gt_right">21.2&percnt;</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+
+
+<!-- rnb-html-end -->
+
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>If you look at legendary count type one it looks like</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9rZW1vbl9kZiAlPiUgXG4gIGdyb3VwX2J5KHR5cGUxKSAlPiUgXG4gIHN1bW1hcmlzZShcbiAgICBjb3VudF90b3RhbCA9IG4oKSxcbiAgICBjb3VudF9sZWdlbmRhcnkgPSBzdW0oaXNfbGVnZW5kYXJ5KSxcbiAgICBwZXJjZW50X2xlZ2VuZGFyeSA9IHN1bShpc19sZWdlbmRhcnkpLyBuKClcbiAgKSAlPiUgXG4gIGFycmFuZ2UocGVyY2VudF9sZWdlbmRhcnkpICU+JSBcbiAgZ3QoKSAlPiUgXG4gIGZtdF9wZXJjZW50KFxuICAgIGNvbHVtbnMgPSB2YXJzKHBlcmNlbnRfbGVnZW5kYXJ5KSxcbiAgICBkZWNpbWFscyA9IDFcbiAgKSAlPiUgXG4gIHRhYl9oZWFkZXIoXG4gICAgdGl0bGUgPSBtZChcIioqTGVnZW5kYXJ5IFBva2Vtb24gYnkgVHlwZTEqKlwiKSxcbiAgICBzdWJ0aXRsZSA9IG1kKFwiRG9lcyBub3QgaW5jbHVkZSAqU3dvcmQgJiBTaGllbGQqXCIpXG4gICkgXG5gYGAifQ== -->
+<pre class="r"><code>pokemon_df %&gt;% 
+  group_by(type1) %&gt;% 
+  summarise(
+    count_total = n(),
+    count_legendary = sum(is_legendary),
+    percent_legendary = sum(is_legendary)/ n()
+  ) %&gt;% 
+  arrange(percent_legendary) %&gt;% 
+  gt() %&gt;% 
+  fmt_percent(
+    columns = vars(percent_legendary),
+    decimals = 1
+  ) %&gt;% 
+  tab_header(
+    title = md(&quot;**Legendary Pokemon by Type1**&quot;),
+    subtitle = md(&quot;Does not include *Sword &amp; Shield*&quot;)
+  ) </code></pre>
+<!-- rnb-source-end -->
+<p>
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInNoaW55LnRhZy5saXN0IiwibGlzdCJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#uqibwtgcbo .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  /* table.margin.left */
+  margin-right: auto;
+  /* table.margin.right */
+  color: #333333;
+  font-size: 16px;
+  /* table.font.size */
+  background-color: #FFFFFF;
+  /* table.background.color */
+  width: auto;
+  /* table.width */
+  border-top-style: solid;
+  /* table.border.top.style */
+  border-top-width: 2px;
+  /* table.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table.border.top.color */
+  border-bottom-style: solid;
+  /* table.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* table.border.bottom.color */
+}
+
+#uqibwtgcbo .gt_heading {
+  background-color: #FFFFFF;
+  /* heading.background.color */
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-left-style: hidden;
+  /* heading.border.lr.style */
+  border-left-width: 1px;
+  /* heading.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* heading.border.lr.color */
+  border-right-style: hidden;
+  /* heading.border.lr.style */
+  border-right-width: 1px;
+  /* heading.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* heading.border.lr.color */
+}
+
+#uqibwtgcbo .gt_title {
+  color: #333333;
+  font-size: 125%;
+  /* heading.title.font.size */
+  font-weight: initial;
+  /* heading.title.font.weight */
+  padding-top: 4px;
+  /* heading.top.padding - not yet used */
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-bottom-width: 0;
+}
+
+#uqibwtgcbo .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  /* heading.subtitle.font.size */
+  font-weight: initial;
+  /* heading.subtitle.font.weight */
+  padding-top: 0;
+  padding-bottom: 4px;
+  /* heading.bottom.padding - not yet used */
+  border-top-color: #FFFFFF;
+  /* table.background.color */
+  border-top-width: 0;
+}
+
+#uqibwtgcbo .gt_bottom_border {
+  border-bottom-style: solid;
+  /* heading.border.bottom.style */
+  border-bottom-width: 2px;
+  /* heading.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* heading.border.bottom.color */
+}
+
+#uqibwtgcbo .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#uqibwtgcbo .gt_col_headings {
+  border-top-style: solid;
+  /* column_labels.border.top.style */
+  border-top-width: 2px;
+  /* column_labels.border.top.width */
+  border-top-color: #D3D3D3;
+  /* column_labels.border.top.color */
+  border-bottom-style: solid;
+  /* column_labels.border.bottom.style */
+  border-bottom-width: 2px;
+  /* column_labels.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* column_labels.border.bottom.color */
+  border-left-style: none;
+  /* column_labels.border.lr.style */
+  border-left-width: 1px;
+  /* column_labels.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+  border-right-style: none;
+  /* column_labels.border.lr.style */
+  border-right-width: 1px;
+  /* column_labels.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+}
+
+#uqibwtgcbo .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* column_labels.background.color */
+  font-size: 100%;
+  /* column_labels.font.size */
+  font-weight: initial;
+  /* column_labels.font.weight */
+  text-transform: inherit;
+  /* column_labels.text_transform */
+  vertical-align: middle;
+  padding: 5px;
+  margin: 10px;
+  overflow-x: hidden;
+}
+
+#uqibwtgcbo .gt_sep_right {
+  border-right: 5px solid #FFFFFF;
+}
+
+#uqibwtgcbo .gt_group_heading {
+  padding: 8px;
+  /* row_group.padding */
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  text-transform: inherit;
+  /* row_group.text_transform */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  border-left-style: none;
+  /* row_group.border.left.style */
+  border-left-width: 1px;
+  /* row_group.border.left.width */
+  border-left-color: #D3D3D3;
+  /* row_group.border.left.color */
+  border-right-style: none;
+  /* row_group.border.right.style */
+  border-right-width: 1px;
+  /* row_group.border.right.width */
+  border-right-color: #D3D3D3;
+  /* row_group.border.right.color */
+  vertical-align: middle;
+}
+
+#uqibwtgcbo .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#uqibwtgcbo .gt_striped {
+  background-color: #8080800D;
+  /* row.striping.background_color */
+}
+
+#uqibwtgcbo .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#uqibwtgcbo .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#uqibwtgcbo .gt_row {
+  padding-top: 8px;
+  /* data_row.padding */
+  padding-bottom: 8px;
+  /* data_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  /* table_body.hlines.style */
+  border-top-width: 1px;
+  /* table_body.hlines.width */
+  border-top-color: #D3D3D3;
+  /* table_body.hlines.color */
+  border-left-style: none;
+  /* table_body.vlines.style */
+  border-left-width: 1px;
+  /* table_body.vlines.width */
+  border-left-color: #D3D3D3;
+  /* table_body.vlines.color */
+  border-right-style: none;
+  /* table_body.vlines.style */
+  border-right-width: 1px;
+  /* table_body.vlines.width */
+  border-right-color: #D3D3D3;
+  /* table_body.vlines.color */
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#uqibwtgcbo .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* stub.background.color */
+  font-weight: initial;
+  /* stub.font.weight */
+  text-transform: inherit;
+  /* stub.text_transform */
+  border-right-style: solid;
+  /* stub.border.style */
+  border-right-width: 2px;
+  /* stub.border.width */
+  border-right-color: #D3D3D3;
+  /* stub.border.color */
+  padding-left: 12px;
+}
+
+#uqibwtgcbo .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* summary_row.background.color */
+  text-transform: inherit;
+  /* summary_row.text_transform */
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uqibwtgcbo .gt_first_summary_row {
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  /* summary_row.border.style */
+  border-top-width: 2px;
+  /* summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* summary_row.border.color */
+}
+
+#uqibwtgcbo .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* grand_summary_row.background.color */
+  text-transform: inherit;
+  /* grand_summary_row.text_transform */
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#uqibwtgcbo .gt_first_grand_summary_row {
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  /* grand_summary_row.border.style */
+  border-top-width: 6px;
+  /* grand_summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* grand_summary_row.border.color */
+}
+
+#uqibwtgcbo .gt_table_body {
+  border-top-style: solid;
+  /* table_body.border.top.style */
+  border-top-width: 2px;
+  /* table_body.border.top.width */
+  border-top-color: #D3D3D3;
+  /* table_body.border.top.color */
+  border-bottom-style: solid;
+  /* table_body.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table_body.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* table_body.border.bottom.color */
+}
+
+#uqibwtgcbo .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* footnotes.background.color */
+  border-bottom-style: none;
+  /* footnotes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* footnotes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* footnotes.border.bottom.color */
+  border-left-style: none;
+  /* footnotes.border.lr.color */
+  border-left-width: 2px;
+  /* footnotes.border.lr.color */
+  border-left-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+  border-right-style: none;
+  /* footnotes.border.lr.color */
+  border-right-width: 2px;
+  /* footnotes.border.lr.color */
+  border-right-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+}
+
+#uqibwtgcbo .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  /* footnotes.font.size */
+  padding: 4px;
+  /* footnotes.padding */
+}
+
+#uqibwtgcbo .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* source_notes.background.color */
+  border-bottom-style: none;
+  /* source_notes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* source_notes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* source_notes.border.bottom.color */
+  border-left-style: none;
+  /* source_notes.border.lr.style */
+  border-left-width: 2px;
+  /* source_notes.border.lr.style */
+  border-left-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+  border-right-style: none;
+  /* source_notes.border.lr.style */
+  border-right-width: 2px;
+  /* source_notes.border.lr.style */
+  border-right-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+}
+
+#uqibwtgcbo .gt_sourcenote {
+  font-size: 90%;
+  /* source_notes.font.size */
+  padding: 4px;
+  /* source_notes.padding */
+}
+
+#uqibwtgcbo .gt_left {
+  text-align: left;
+}
+
+#uqibwtgcbo .gt_center {
+  text-align: center;
+}
+
+#uqibwtgcbo .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#uqibwtgcbo .gt_font_normal {
+  font-weight: normal;
+}
+
+#uqibwtgcbo .gt_font_bold {
+  font-weight: bold;
+}
+
+#uqibwtgcbo .gt_font_italic {
+  font-style: italic;
+}
+
+#uqibwtgcbo .gt_super {
+  font-size: 65%;
+}
+
+#uqibwtgcbo .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="uqibwtgcbo" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="4" class="gt_heading gt_title gt_font_normal gt_center" style><strong>Legendary Pokemon by Type1</strong></th>
+    </tr>
+    <tr>
+      <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_center gt_bottom_border" style>Does not include <em>Sword &amp; Shield</em></th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">type1</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">count_total</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">count_legendary</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">percent_legendary</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">fighting</td>
+      <td class="gt_row gt_center">28</td>
+      <td class="gt_row gt_right">0</td>
+      <td class="gt_row gt_right">0.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">poison</td>
+      <td class="gt_row gt_center gt_striped">32</td>
+      <td class="gt_row gt_right gt_striped">0</td>
+      <td class="gt_row gt_right gt_striped">0.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">normal</td>
+      <td class="gt_row gt_center">105</td>
+      <td class="gt_row gt_right">3</td>
+      <td class="gt_row gt_right">2.9&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">ghost</td>
+      <td class="gt_row gt_center gt_striped">27</td>
+      <td class="gt_row gt_right gt_striped">1</td>
+      <td class="gt_row gt_right gt_striped">3.7&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">bug</td>
+      <td class="gt_row gt_center">72</td>
+      <td class="gt_row gt_right">3</td>
+      <td class="gt_row gt_right">4.2&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">grass</td>
+      <td class="gt_row gt_center gt_striped">78</td>
+      <td class="gt_row gt_right gt_striped">4</td>
+      <td class="gt_row gt_right gt_striped">5.1&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">water</td>
+      <td class="gt_row gt_center">114</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">5.3&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">fairy</td>
+      <td class="gt_row gt_center gt_striped">18</td>
+      <td class="gt_row gt_right gt_striped">1</td>
+      <td class="gt_row gt_right gt_striped">5.6&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">ground</td>
+      <td class="gt_row gt_center">32</td>
+      <td class="gt_row gt_right">2</td>
+      <td class="gt_row gt_right">6.2&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">ice</td>
+      <td class="gt_row gt_center gt_striped">23</td>
+      <td class="gt_row gt_right gt_striped">2</td>
+      <td class="gt_row gt_right gt_striped">8.7&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">rock</td>
+      <td class="gt_row gt_center">45</td>
+      <td class="gt_row gt_right">4</td>
+      <td class="gt_row gt_right">8.9&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">fire</td>
+      <td class="gt_row gt_center gt_striped">52</td>
+      <td class="gt_row gt_right gt_striped">5</td>
+      <td class="gt_row gt_right gt_striped">9.6&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">dark</td>
+      <td class="gt_row gt_center">29</td>
+      <td class="gt_row gt_right">3</td>
+      <td class="gt_row gt_right">10.3&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">electric</td>
+      <td class="gt_row gt_center gt_striped">39</td>
+      <td class="gt_row gt_right gt_striped">5</td>
+      <td class="gt_row gt_right gt_striped">12.8&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">steel</td>
+      <td class="gt_row gt_center">24</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">25.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">dragon</td>
+      <td class="gt_row gt_center gt_striped">27</td>
+      <td class="gt_row gt_right gt_striped">7</td>
+      <td class="gt_row gt_right gt_striped">25.9&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">psychic</td>
+      <td class="gt_row gt_center">53</td>
+      <td class="gt_row gt_right">17</td>
+      <td class="gt_row gt_right">32.1&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">flying</td>
+      <td class="gt_row gt_center gt_striped">3</td>
+      <td class="gt_row gt_right gt_striped">1</td>
+      <td class="gt_row gt_right gt_striped">33.3&percnt;</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+
+
+<!-- rnb-html-end -->
+ <!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuXG5wb2tlbW9uX2RmICU+JSBcbiAgZ3JvdXBfYnkodHlwZTIpICU+JSBcbiAgc3VtbWFyaXNlKFxuICAgIGNvdW50X3RvdGFsID0gbigpLFxuICAgIGNvdW50X2xlZ2VuZGFyeSA9IHN1bShpc19sZWdlbmRhcnkpLFxuICAgIHBlcmNlbnRfbGVnZW5kYXJ5ID0gc3VtKGlzX2xlZ2VuZGFyeSkvIG4oKVxuICApICU+JSBcbiAgYXJyYW5nZShwZXJjZW50X2xlZ2VuZGFyeSkgJT4lIFxuICBndCgpICU+JSBcbiAgZm10X3BlcmNlbnQoXG4gICAgY29sdW1ucyA9IHZhcnMocGVyY2VudF9sZWdlbmRhcnkpLFxuICAgIGRlY2ltYWxzID0gMVxuICApICU+JSBcbiAgdGFiX2hlYWRlcihcbiAgICB0aXRsZSA9IG1kKFwiKipMZWdlbmRhcnkgUG9rZW1vbiBieSBUeXBlMioqXCIpLFxuICAgIHN1YnRpdGxlID0gbWQoXCJEb2VzIG5vdCBpbmNsdWRlICpTd29yZCAmIFNoaWVsZCpcIilcbiAgKSBcbmBgYCJ9 --></p>
+<pre class="r"><code>
+pokemon_df %&gt;% 
+  group_by(type2) %&gt;% 
+  summarise(
+    count_total = n(),
+    count_legendary = sum(is_legendary),
+    percent_legendary = sum(is_legendary)/ n()
+  ) %&gt;% 
+  arrange(percent_legendary) %&gt;% 
+  gt() %&gt;% 
+  fmt_percent(
+    columns = vars(percent_legendary),
+    decimals = 1
+  ) %&gt;% 
+  tab_header(
+    title = md(&quot;**Legendary Pokemon by Type2**&quot;),
+    subtitle = md(&quot;Does not include *Sword &amp; Shield*&quot;)
+  ) </code></pre>
+<!-- rnb-source-end -->
+
+<!-- rnb-html-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbInNoaW55LnRhZy5saXN0IiwibGlzdCJdLCJzaXppbmdQb2xpY3kiOltdfX0= -->
+
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#xizwhprkhx .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  /* table.margin.left */
+  margin-right: auto;
+  /* table.margin.right */
+  color: #333333;
+  font-size: 16px;
+  /* table.font.size */
+  background-color: #FFFFFF;
+  /* table.background.color */
+  width: auto;
+  /* table.width */
+  border-top-style: solid;
+  /* table.border.top.style */
+  border-top-width: 2px;
+  /* table.border.top.width */
+  border-top-color: #A8A8A8;
+  /* table.border.top.color */
+  border-bottom-style: solid;
+  /* table.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table.border.bottom.width */
+  border-bottom-color: #A8A8A8;
+  /* table.border.bottom.color */
+}
+
+#xizwhprkhx .gt_heading {
+  background-color: #FFFFFF;
+  /* heading.background.color */
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-left-style: hidden;
+  /* heading.border.lr.style */
+  border-left-width: 1px;
+  /* heading.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* heading.border.lr.color */
+  border-right-style: hidden;
+  /* heading.border.lr.style */
+  border-right-width: 1px;
+  /* heading.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* heading.border.lr.color */
+}
+
+#xizwhprkhx .gt_title {
+  color: #333333;
+  font-size: 125%;
+  /* heading.title.font.size */
+  font-weight: initial;
+  /* heading.title.font.weight */
+  padding-top: 4px;
+  /* heading.top.padding - not yet used */
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  /* table.background.color */
+  border-bottom-width: 0;
+}
+
+#xizwhprkhx .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  /* heading.subtitle.font.size */
+  font-weight: initial;
+  /* heading.subtitle.font.weight */
+  padding-top: 0;
+  padding-bottom: 4px;
+  /* heading.bottom.padding - not yet used */
+  border-top-color: #FFFFFF;
+  /* table.background.color */
+  border-top-width: 0;
+}
+
+#xizwhprkhx .gt_bottom_border {
+  border-bottom-style: solid;
+  /* heading.border.bottom.style */
+  border-bottom-width: 2px;
+  /* heading.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* heading.border.bottom.color */
+}
+
+#xizwhprkhx .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#xizwhprkhx .gt_col_headings {
+  border-top-style: solid;
+  /* column_labels.border.top.style */
+  border-top-width: 2px;
+  /* column_labels.border.top.width */
+  border-top-color: #D3D3D3;
+  /* column_labels.border.top.color */
+  border-bottom-style: solid;
+  /* column_labels.border.bottom.style */
+  border-bottom-width: 2px;
+  /* column_labels.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* column_labels.border.bottom.color */
+  border-left-style: none;
+  /* column_labels.border.lr.style */
+  border-left-width: 1px;
+  /* column_labels.border.lr.width */
+  border-left-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+  border-right-style: none;
+  /* column_labels.border.lr.style */
+  border-right-width: 1px;
+  /* column_labels.border.lr.width */
+  border-right-color: #D3D3D3;
+  /* column_labels.border.lr.color */
+}
+
+#xizwhprkhx .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* column_labels.background.color */
+  font-size: 100%;
+  /* column_labels.font.size */
+  font-weight: initial;
+  /* column_labels.font.weight */
+  text-transform: inherit;
+  /* column_labels.text_transform */
+  vertical-align: middle;
+  padding: 5px;
+  margin: 10px;
+  overflow-x: hidden;
+}
+
+#xizwhprkhx .gt_sep_right {
+  border-right: 5px solid #FFFFFF;
+}
+
+#xizwhprkhx .gt_group_heading {
+  padding: 8px;
+  /* row_group.padding */
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  text-transform: inherit;
+  /* row_group.text_transform */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  border-left-style: none;
+  /* row_group.border.left.style */
+  border-left-width: 1px;
+  /* row_group.border.left.width */
+  border-left-color: #D3D3D3;
+  /* row_group.border.left.color */
+  border-right-style: none;
+  /* row_group.border.right.style */
+  border-right-width: 1px;
+  /* row_group.border.right.width */
+  border-right-color: #D3D3D3;
+  /* row_group.border.right.color */
+  vertical-align: middle;
+}
+
+#xizwhprkhx .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  /* row_group.background.color */
+  font-size: 100%;
+  /* row_group.font.size */
+  font-weight: initial;
+  /* row_group.font.weight */
+  border-top-style: solid;
+  /* row_group.border.top.style */
+  border-top-width: 2px;
+  /* row_group.border.top.width */
+  border-top-color: #D3D3D3;
+  /* row_group.border.top.color */
+  border-bottom-style: solid;
+  /* row_group.border.bottom.style */
+  border-bottom-width: 2px;
+  /* row_group.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* row_group.border.bottom.color */
+  vertical-align: middle;
+}
+
+#xizwhprkhx .gt_striped {
+  background-color: #8080800D;
+  /* row.striping.background_color */
+}
+
+#xizwhprkhx .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#xizwhprkhx .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#xizwhprkhx .gt_row {
+  padding-top: 8px;
+  /* data_row.padding */
+  padding-bottom: 8px;
+  /* data_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  /* table_body.hlines.style */
+  border-top-width: 1px;
+  /* table_body.hlines.width */
+  border-top-color: #D3D3D3;
+  /* table_body.hlines.color */
+  border-left-style: none;
+  /* table_body.vlines.style */
+  border-left-width: 1px;
+  /* table_body.vlines.width */
+  border-left-color: #D3D3D3;
+  /* table_body.vlines.color */
+  border-right-style: none;
+  /* table_body.vlines.style */
+  border-right-width: 1px;
+  /* table_body.vlines.width */
+  border-right-color: #D3D3D3;
+  /* table_body.vlines.color */
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#xizwhprkhx .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* stub.background.color */
+  font-weight: initial;
+  /* stub.font.weight */
+  text-transform: inherit;
+  /* stub.text_transform */
+  border-right-style: solid;
+  /* stub.border.style */
+  border-right-width: 2px;
+  /* stub.border.width */
+  border-right-color: #D3D3D3;
+  /* stub.border.color */
+  padding-left: 12px;
+}
+
+#xizwhprkhx .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* summary_row.background.color */
+  text-transform: inherit;
+  /* summary_row.text_transform */
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xizwhprkhx .gt_first_summary_row {
+  padding-top: 8px;
+  /* summary_row.padding */
+  padding-bottom: 8px;
+  /* summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  /* summary_row.border.style */
+  border-top-width: 2px;
+  /* summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* summary_row.border.color */
+}
+
+#xizwhprkhx .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* grand_summary_row.background.color */
+  text-transform: inherit;
+  /* grand_summary_row.text_transform */
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#xizwhprkhx .gt_first_grand_summary_row {
+  padding-top: 8px;
+  /* grand_summary_row.padding */
+  padding-bottom: 8px;
+  /* grand_summary_row.padding */
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  /* grand_summary_row.border.style */
+  border-top-width: 6px;
+  /* grand_summary_row.border.width */
+  border-top-color: #D3D3D3;
+  /* grand_summary_row.border.color */
+}
+
+#xizwhprkhx .gt_table_body {
+  border-top-style: solid;
+  /* table_body.border.top.style */
+  border-top-width: 2px;
+  /* table_body.border.top.width */
+  border-top-color: #D3D3D3;
+  /* table_body.border.top.color */
+  border-bottom-style: solid;
+  /* table_body.border.bottom.style */
+  border-bottom-width: 2px;
+  /* table_body.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* table_body.border.bottom.color */
+}
+
+#xizwhprkhx .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* footnotes.background.color */
+  border-bottom-style: none;
+  /* footnotes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* footnotes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* footnotes.border.bottom.color */
+  border-left-style: none;
+  /* footnotes.border.lr.color */
+  border-left-width: 2px;
+  /* footnotes.border.lr.color */
+  border-left-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+  border-right-style: none;
+  /* footnotes.border.lr.color */
+  border-right-width: 2px;
+  /* footnotes.border.lr.color */
+  border-right-color: #D3D3D3;
+  /* footnotes.border.lr.color */
+}
+
+#xizwhprkhx .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  /* footnotes.font.size */
+  padding: 4px;
+  /* footnotes.padding */
+}
+
+#xizwhprkhx .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  /* source_notes.background.color */
+  border-bottom-style: none;
+  /* source_notes.border.bottom.style */
+  border-bottom-width: 2px;
+  /* source_notes.border.bottom.width */
+  border-bottom-color: #D3D3D3;
+  /* source_notes.border.bottom.color */
+  border-left-style: none;
+  /* source_notes.border.lr.style */
+  border-left-width: 2px;
+  /* source_notes.border.lr.style */
+  border-left-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+  border-right-style: none;
+  /* source_notes.border.lr.style */
+  border-right-width: 2px;
+  /* source_notes.border.lr.style */
+  border-right-color: #D3D3D3;
+  /* source_notes.border.lr.style */
+}
+
+#xizwhprkhx .gt_sourcenote {
+  font-size: 90%;
+  /* source_notes.font.size */
+  padding: 4px;
+  /* source_notes.padding */
+}
+
+#xizwhprkhx .gt_left {
+  text-align: left;
+}
+
+#xizwhprkhx .gt_center {
+  text-align: center;
+}
+
+#xizwhprkhx .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#xizwhprkhx .gt_font_normal {
+  font-weight: normal;
+}
+
+#xizwhprkhx .gt_font_bold {
+  font-weight: bold;
+}
+
+#xizwhprkhx .gt_font_italic {
+  font-style: italic;
+}
+
+#xizwhprkhx .gt_super {
+  font-size: 65%;
+}
+
+#xizwhprkhx .gt_footnote_marks {
+  font-style: italic;
+  font-size: 65%;
+}
+</style>
+<div id="xizwhprkhx" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;"><table class="gt_table">
+  <thead class="gt_header">
+    <tr>
+      <th colspan="4" class="gt_heading gt_title gt_font_normal gt_center" style><strong>Legendary Pokemon by Type2</strong></th>
+    </tr>
+    <tr>
+      <th colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_center gt_bottom_border" style>Does not include <em>Sword &amp; Shield</em></th>
+    </tr>
+  </thead>
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1">type2</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1">count_total</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">count_legendary</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1">percent_legendary</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr>
+      <td class="gt_row gt_left">bug</td>
+      <td class="gt_row gt_center">5</td>
+      <td class="gt_row gt_right">0</td>
+      <td class="gt_row gt_right">0.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">dark</td>
+      <td class="gt_row gt_center gt_striped">21</td>
+      <td class="gt_row gt_right gt_striped">0</td>
+      <td class="gt_row gt_right gt_striped">0.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">normal</td>
+      <td class="gt_row gt_center">4</td>
+      <td class="gt_row gt_right">0</td>
+      <td class="gt_row gt_right">0.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">rock</td>
+      <td class="gt_row gt_center gt_striped">14</td>
+      <td class="gt_row gt_right gt_striped">0</td>
+      <td class="gt_row gt_right gt_striped">0.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">ground</td>
+      <td class="gt_row gt_center">34</td>
+      <td class="gt_row gt_right">1</td>
+      <td class="gt_row gt_right">2.9&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">poison</td>
+      <td class="gt_row gt_center gt_striped">34</td>
+      <td class="gt_row gt_right gt_striped">1</td>
+      <td class="gt_row gt_right gt_striped">2.9&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">water</td>
+      <td class="gt_row gt_center">17</td>
+      <td class="gt_row gt_right">1</td>
+      <td class="gt_row gt_right">5.9&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">none</td>
+      <td class="gt_row gt_center gt_striped">384</td>
+      <td class="gt_row gt_right gt_striped">25</td>
+      <td class="gt_row gt_right gt_striped">6.5&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">ice</td>
+      <td class="gt_row gt_center">15</td>
+      <td class="gt_row gt_right">1</td>
+      <td class="gt_row gt_right">6.7&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">grass</td>
+      <td class="gt_row gt_center gt_striped">20</td>
+      <td class="gt_row gt_right gt_striped">2</td>
+      <td class="gt_row gt_right gt_striped">10.0&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">flying</td>
+      <td class="gt_row gt_center">95</td>
+      <td class="gt_row gt_right">10</td>
+      <td class="gt_row gt_right">10.5&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">electric</td>
+      <td class="gt_row gt_center gt_striped">9</td>
+      <td class="gt_row gt_right gt_striped">1</td>
+      <td class="gt_row gt_right gt_striped">11.1&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">psychic</td>
+      <td class="gt_row gt_center">29</td>
+      <td class="gt_row gt_right">4</td>
+      <td class="gt_row gt_right">13.8&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">ghost</td>
+      <td class="gt_row gt_center gt_striped">14</td>
+      <td class="gt_row gt_right gt_striped">2</td>
+      <td class="gt_row gt_right gt_striped">14.3&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">fire</td>
+      <td class="gt_row gt_center">13</td>
+      <td class="gt_row gt_right">2</td>
+      <td class="gt_row gt_right">15.4&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">steel</td>
+      <td class="gt_row gt_center gt_striped">22</td>
+      <td class="gt_row gt_right gt_striped">4</td>
+      <td class="gt_row gt_right gt_striped">18.2&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">fairy</td>
+      <td class="gt_row gt_center">29</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">20.7&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left gt_striped">dragon</td>
+      <td class="gt_row gt_center gt_striped">17</td>
+      <td class="gt_row gt_right gt_striped">4</td>
+      <td class="gt_row gt_right gt_striped">23.5&percnt;</td>
+    </tr>
+    <tr>
+      <td class="gt_row gt_left">fighting</td>
+      <td class="gt_row gt_center">25</td>
+      <td class="gt_row gt_right">6</td>
+      <td class="gt_row gt_right">24.0&percnt;</td>
+    </tr>
+  </tbody>
+  
+  
+</table></div>
+
+
+<!-- rnb-html-end -->
+
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="modeling" class="section level2">
+<h2>Modeling</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB0cmFpbmluZyBkYXRhIGZyYW1lXG50cmFpbl9kZiA8LSBwb2tlbW9uX2RmICU+JSBmaWx0ZXIoZ2VuZXJhdGlvbiAhPSA3KVxuXG4jIHRlc3RpbmcgZGF0YSBmcmFtZVxudGVzdF9kZiA8LSBwb2tlbW9uX2RmICU+JSBmaWx0ZXIoZ2VuZXJhdGlvbiA9PSA3KVxuYGBgIn0= -->
+<pre class="r"><code># training data frame
+train_df &lt;- pokemon_df %&gt;% filter(generation != 7)
+
+# testing data frame
+test_df &lt;- pokemon_df %&gt;% filter(generation == 7)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlBva2Vtb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojIFNldCBVcCAmIERhdGEgUHVsbA0KDQpEZXYgTmVlZHMNCisgcHVsbCBzcHJpdGVzIA0KICArIGh0dHBzOi8vcG9rZW1vbmRiLm5ldC9zcHJpdGVzDQogICsgaHR0cHM6Ly92ZWVrdW4uY29tL2RleC9kb3dubG9hZHMNCg0KYGBge3IgbG9hZC1wYWNrYWdlc30NCmxpYnJhcnkodGlkeXZlcnNlKQ0KYGBgDQoNCmBgYHtyIGRhdGEtcHVsbCwgbWVzc2FnZT1GQUxTRX0NCnBva2Vtb25fZGYgPC0gcmVhZF9jc3YoZmlsZSA9IGhlcmU6OmhlcmUoImRhdGEiLCJwb2tlbW9uLmNzdiIpKSAlPiUgYXNfdGliYmxlKCkNCmBgYA0KDQpgYGB7ciBzcHJpdGUtcHVsbH0NCg0KYGBgDQoNClshW01ld10oaHR0cHM6Ly9pbWcucG9rZW1vbmRiLm5ldC9zcHJpdGVzL3JlZC1ibHVlL25vcm1hbC9tZXcucG5nKV0oaHR0cDovL3Bva2Vtb25kYi5uZXQvcG9rZWRleC9tZXcpIA0KDQpgYGB7ciBlZGF9DQpwb2tlbW9uX2RmICU+JSANCiAgZ2dwbG90KGFlcyh4ID0gd2VpZ2h0X2tnLCB5ID0gaGVpZ2h0X20pKSArIA0KICAgIGdlb21fcG9pbnQoYWVzKGNvbG9yID0gYXMuY2hhcmFjdGVyKGdlbmVyYXRpb24pKSkgKyANCiAgICBnZW9tX3Ntb290aChhZXMoZ3JvdXAgPSBhcy5jaGFyYWN0ZXIoZ2VuZXJhdGlvbiksY29sb3IgPSBhcy5jaGFyYWN0ZXIoZ2VuZXJhdGlvbikpKSArDQogICAgZmFjZXRfd3JhcCgufmFzLmNoYXJhY3RlcihnZW5lcmF0aW9uKSkNCmBgYA0KDQo=</div>
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlBva2Vtb24iDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpbIVtNZXddKGh0dHBzOi8vaW1nLnBva2Vtb25kYi5uZXQvc3ByaXRlcy9yZWQtYmx1ZS9ub3JtYWwvbWV3LnBuZyldKGh0dHA6Ly9wb2tlbW9uZGIubmV0L3Bva2VkZXgvbWV3KQ0KDQoNCiMgU2V0IFVwICYgRGF0YSBQdWxsDQoNCkRldiBOZWVkcw0KDQorIHB1bGwgc3ByaXRlcyANCiAgKyBodHRwczovL3Bva2Vtb25kYi5uZXQvc3ByaXRlcw0KICArIGh0dHBzOi8vdmVla3VuLmNvbS9kZXgvZG93bmxvYWRzDQogIA0KKyBtb2RlbA0KICArIA0KICANCg0KYGBge3IgbG9hZC1wYWNrYWdlcyAsIG1lc3NhZ2U9RkFMU0UsIHdhcm5pbmc9RkFMU0V9DQpsaWJyYXJ5KHRpZHltb2RlbHMpIyB0aWR5IG1vZGVsIGZyYW1ld29yaw0KbGlicmFyeSh0aWR5dmVyc2UpICMgcGxvdHRpbmcgYW5kIGRhdGEgbWFuaXB1bGF0aW9uDQpsaWJyYXJ5KERBTEVYKSAgICAgIyBlYXN5IG1vZGVsIGludGVycHJldGF0aW9uDQpsaWJyYXJ5KGd0KQ0KYGBgDQoNCmBgYHtyIGRhdGEtcHVsbCwgbWVzc2FnZT1GQUxTRSwgd2FybmluZz1GQUxTRX0NCnBva2Vtb25fZGYgPC0gcmVhZF9jc3YoZmlsZSA9IGhlcmU6OmhlcmUoImRhdGEiLCJwb2tlbW9uLmNzdiIpKSAlPiUgDQogIGFzX3RpYmJsZSgpICU+JSANCiAgbXV0YXRlKHR5cGUyID0gY2FzZV93aGVuKA0KICAgIA0KICAgIGlzLm5hKHR5cGUyKX4gIm5vbmUiLA0KICAgIFRSVUUgfiB0eXBlMg0KICAgICkNCiAgKQ0KYGBgDQoNCiMjIEVEQQ0KDQpUbyBtaW1pYyB0aGVpciBwcm9qZWN0IEkgZ3Vlc3MgdGhleSB1c2UgdHJlZS1iYXNlZCBtb2RlbHMgdG8gcHJlZGljdCB3ZXRoZXIgb3Igbm90IGEgUG9rZW1vbiBpcyBsZWdlbmRhcnkuDQoNCkl0IHNlZW1zIHRoZXkgZ290IGxlZ2VuZGFyeSBoYXBweSBpbiB0aGUgNy1nZW5lcmF0aW9uIG9mIFBva2Vtb24uLi4gTm90IHN1cmUgd2hhdCBnYW1lcyB0aG9zZSBhcmUgc2luY2UgSSBoYXZlbid0IHBsYXllZCBzaW5jZSAqUG9rZW1vbiBSZWQqLg0KDQpgYGB7ciBnZW5lcmF0aW9uLWxlZ2VuZGFyeX0NCnBva2Vtb25fZGYgJT4lIA0KICBncm91cF9ieShnZW5lcmF0aW9uKSAlPiUgDQogIHN1bW1hcmlzZSgNCiAgICBjb3VudF90b3RhbCA9IG4oKSwNCiAgICBjb3VudF9sZWdlbmRhcnkgPSBzdW0oaXNfbGVnZW5kYXJ5KSwNCiAgICBwZXJjZW50X2xlZ2VuZGFyeSA9IHN1bShpc19sZWdlbmRhcnkpLyBuKCkNCiAgKSAlPiUgDQogIGd0KCkgJT4lIA0KICBmbXRfcGVyY2VudCgNCiAgICBjb2x1bW5zID0gdmFycyhwZXJjZW50X2xlZ2VuZGFyeSksDQogICAgZGVjaW1hbHMgPSAxDQogICkgJT4lIA0KICB0YWJfaGVhZGVyKA0KICAgIHRpdGxlID0gbWQoIioqTGVnZW5kYXJ5IFBva2Vtb24gYnkgR2VuZXJhdGlvbioqIiksDQogICAgc3VidGl0bGUgPSBtZCgiRG9lcyBub3QgaW5jbHVkZSAqU3dvcmQgJiBTaGllbGQqIikNCiAgKSANCmBgYA0KDQoNCklmIHlvdSBsb29rIGF0IGxlZ2VuZGFyeSBjb3VudCB0eXBlIG9uZSBpdCBsb29rcyBsaWtlIA0KYGBge3IgdHlwZS1sZWdlbmRhcnl9DQpwb2tlbW9uX2RmICU+JSANCiAgZ3JvdXBfYnkodHlwZTEpICU+JSANCiAgc3VtbWFyaXNlKA0KICAgIGNvdW50X3RvdGFsID0gbigpLA0KICAgIGNvdW50X2xlZ2VuZGFyeSA9IHN1bShpc19sZWdlbmRhcnkpLA0KICAgIHBlcmNlbnRfbGVnZW5kYXJ5ID0gc3VtKGlzX2xlZ2VuZGFyeSkvIG4oKQ0KICApICU+JSANCiAgYXJyYW5nZShwZXJjZW50X2xlZ2VuZGFyeSkgJT4lIA0KICBndCgpICU+JSANCiAgZm10X3BlcmNlbnQoDQogICAgY29sdW1ucyA9IHZhcnMocGVyY2VudF9sZWdlbmRhcnkpLA0KICAgIGRlY2ltYWxzID0gMQ0KICApICU+JSANCiAgdGFiX2hlYWRlcigNCiAgICB0aXRsZSA9IG1kKCIqKkxlZ2VuZGFyeSBQb2tlbW9uIGJ5IFR5cGUxKioiKSwNCiAgICBzdWJ0aXRsZSA9IG1kKCJEb2VzIG5vdCBpbmNsdWRlICpTd29yZCAmIFNoaWVsZCoiKQ0KICApIA0KDQpwb2tlbW9uX2RmICU+JSANCiAgZ3JvdXBfYnkodHlwZTIpICU+JSANCiAgc3VtbWFyaXNlKA0KICAgIGNvdW50X3RvdGFsID0gbigpLA0KICAgIGNvdW50X2xlZ2VuZGFyeSA9IHN1bShpc19sZWdlbmRhcnkpLA0KICAgIHBlcmNlbnRfbGVnZW5kYXJ5ID0gc3VtKGlzX2xlZ2VuZGFyeSkvIG4oKQ0KICApICU+JSANCiAgYXJyYW5nZShwZXJjZW50X2xlZ2VuZGFyeSkgJT4lIA0KICBndCgpICU+JSANCiAgZm10X3BlcmNlbnQoDQogICAgY29sdW1ucyA9IHZhcnMocGVyY2VudF9sZWdlbmRhcnkpLA0KICAgIGRlY2ltYWxzID0gMQ0KICApICU+JSANCiAgdGFiX2hlYWRlcigNCiAgICB0aXRsZSA9IG1kKCIqKkxlZ2VuZGFyeSBQb2tlbW9uIGJ5IFR5cGUyKioiKSwNCiAgICBzdWJ0aXRsZSA9IG1kKCJEb2VzIG5vdCBpbmNsdWRlICpTd29yZCAmIFNoaWVsZCoiKQ0KICApIA0KYGBgDQoNCiMjIE1vZGVsaW5nDQoNCg0KDQpgYGB7ciBtb2RlbGluZy1kYXRhfQ0KIyB0cmFpbmluZyBkYXRhIGZyYW1lDQp0cmFpbl9kZiA8LSBwb2tlbW9uX2RmICU+JSBmaWx0ZXIoZ2VuZXJhdGlvbiAhPSA3KQ0KDQojIHRlc3RpbmcgZGF0YSBmcmFtZQ0KdGVzdF9kZiA8LSBwb2tlbW9uX2RmICU+JSBmaWx0ZXIoZ2VuZXJhdGlvbiA9PSA3KQ0KYGBgDQoNCmBgYHtyIG1vZGVsLXJlY2lwZX0NCg0KYGBgDQoNCg0KDQoNCg==</div>
 
 
 
