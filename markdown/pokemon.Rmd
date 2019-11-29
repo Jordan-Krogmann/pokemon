@@ -103,6 +103,16 @@ pokemon_df %>%
 
 ## Modeling
 
+```{r}
+pokemon_df %>% 
+  ggplot() + 
+    geom_point(aes(x = height_m, y = weight_kg, color = as.factor(generation))) + 
+    geom_smooth(aes(x = height_m, y = weight_kg, color = as.factor(generation))) + 
+    facet_wrap(.~ generation)
+
+
+
+``` 
 
 
 ```{r modeling-data}
