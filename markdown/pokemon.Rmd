@@ -22,7 +22,8 @@ Dev Needs
 library(tidymodels)# tidy model framework
 library(tidyverse) # plotting and data manipulation
 library(DALEX)     # easy model interpretation
-library(gt)
+library(caret)     # model framework
+library(gt)        # clean summary tablss
 ```
 
 ```{r data-pull, message=FALSE, warning=FALSE}
@@ -94,21 +95,32 @@ pokemon_df %>%
 
 ```{r modeling-data}
 # training data frame
-train_df <- pokemon_df %>% filter(generation != 7)
+train_df <- pokemon_df %>% filter(generation != 7) %>% 
+  select(
+    -c(abilities, japanese_name , name, generation, percentage_male)
+  )
 
 # testing data frame
-test_df <- pokemon_df %>% filter(generation == 7)
+test_df <- pokemon_df %>% filter(generation == 7)%>% 
+  select(
+    -c(abilities, japanese_name , name, generation, percentage_male)
+  )
 ```
-
-```{r nest-model}
-nest
-```
-
 
 ```{r model-recipe}
-
+# model recipe
+poke_recipe <- recipe(is_legendary ~ . , data = train_df)
 ```
 
+```{r model-caret}
+caret(
+  formula = is_legendary ~ .,
+  data = train_df,
+  method = "randomforest"
+)
+
+
+```
 
 
 
