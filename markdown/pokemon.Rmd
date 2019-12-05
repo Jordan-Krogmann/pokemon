@@ -27,7 +27,9 @@ library(gt)        # clean summary tablss
 ```
 
 ```{r data-pull, message=FALSE, warning=FALSE}
-pokemon_df <- read_csv(file = here::here("data","pokemon.csv")) %>% 
+pokemon_df <- read_csv(
+  "https://raw.githubusercontent.com/Jordan-Krogmann/pokemon/master/data/pokemon.csv"
+  ) %>% 
   as_tibble() %>% 
   mutate(type2 = case_when(
     is.na(type2)~ "none",
@@ -42,23 +44,34 @@ To mimic their project I guess they use tree-based models to predict wether or n
 
 It seems they got legendary happy in the 7-generation of Pokemon... Not sure what games those are since I haven't played since *Pokemon Red*.
 
-```{r generation-legendary}
+```{r generation-legendary, fig.align='center', fig.height=8, fig.width=12}
 pokemon_df %>% 
-  group_by(generation) %>% 
+    mutate(is_legendary = case_when(
+      is_legendary == 1 ~ "Legendary",
+      is_legendary == 0 ~ "Common"
+  )) %>% 
+  mutate(is_legendary = factor(x = is_legendary, levels = c("Legendary", "Common"))) %>% 
+  group_by(generation, is_legendary) %>% 
   summarise(
     count_total = n(),
-    count_legendary = sum(is_legendary),
-    percent_legendary = sum(is_legendary)/ n()
   ) %>% 
-  gt() %>% 
-  fmt_percent(
-    columns = vars(percent_legendary),
-    decimals = 1
-  ) %>% 
-  tab_header(
-    title = md("**Legendary Pokemon by Generation**"),
-    subtitle = md("Does not include *Sword & Shield*")
-  ) 
+  ggplot(aes(x = as.factor(generation), y = count_total, fill = is_legendary)) + 
+    geom_col(aes(), alpha = .7, color = "black") + 
+    theme_minimal() + 
+    theme(
+      axis.text = element_text(face = "bold", size = 14),
+      axis.title = element_text(face = "bold", size = 14),
+      # axis.text.x = element_text(angle = 45, hjust = 1),
+      plot.title = element_text(face = "bold", size = 16, hjust = .5),
+      legend.position = c(.95,.9),
+      legend.background = element_rect(color = "white")
+      
+    ) + 
+    labs(
+      title = "Count of Legendary Pokemon by Generation",
+      y = "Count",
+      x = "Generation"
+    )
 ```
 
 
@@ -85,6 +98,7 @@ pokemon_df %>%
     ) + 
     labs(
       title = "Percent of Legendary Pokemon by Type",
+      # subtitle = "",
       y = "Percent",
       x = ""
     )
@@ -98,7 +112,7 @@ pokemon_df %>%
 train_df <- pokemon_df %>% filter(generation != 7) %>% 
   select(
     -c(abilities, japanese_name , name, generation, percentage_male)
-  )
+  ) 
 
 # testing data frame
 test_df <- pokemon_df %>% filter(generation == 7)%>% 
@@ -107,16 +121,22 @@ test_df <- pokemon_df %>% filter(generation == 7)%>%
   )
 ```
 
+```{r}
+train_df %>% summary()
+```
+
+
 ```{r model-recipe}
 # model recipe
 poke_recipe <- recipe(is_legendary ~ . , data = train_df)
 ```
 
 ```{r model-caret}
-caret(
+train(
   formula = is_legendary ~ .,
+  na.action = na.pass,
   data = train_df,
-  method = "randomforest"
+  method = "rf"
 )
 
 
