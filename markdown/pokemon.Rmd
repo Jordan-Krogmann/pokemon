@@ -27,26 +27,16 @@ library(gt)        # clean summary tablss
 ```
 
 ```{r data-pull, message=FALSE, warning=FALSE}
-# pokemon_df <- read_csv(
-#   "https://raw.githubusercontent.com/Jordan-Krogmann/pokemon/master/data/pokemon.csv"
-#   ) %>% 
-#   as_tibble() %>% 
-#   mutate(type2 = case_when(
-#     is.na(type2)~ "none",
-#     TRUE ~ type2
-#     )
-#   )
-
 pokemon_df <- read_csv(
-  here::here("data", "pokemon.csv")
-) %>% 
-as_tibble() %>% 
+  "https://raw.githubusercontent.com/Jordan-Krogmann/pokemon/master/data/pokemon.csv"
+  ) %>%
+as_tibble() %>%
 mutate(
   type2 = case_when(
     is.na(type2) ~ "none",
     TRUE ~ type2
   )
-) %>% 
+) %>%
 mutate(
   two_types_flag = case_when(
     type2 == "none" ~ 0,
@@ -62,16 +52,11 @@ To mimic their project I guess they use tree-based models to predict wether or n
 It seems they got legendary happy in the 7-generation of Pokemon... Not sure what games those are since I haven't played since **Pokemon Red**.
 
 ```{r generation-legendary, fig.align='center', fig.height=8, fig.width=12}
-pokemon_df %>% 
+legendary_by_gen_plt <- pokemon_df %>% 
     mutate(is_legendary = case_when(
       is_legendary == 1 ~ "Legendary",
       is_legendary == 0 ~ "Common"
   )) %>% 
-  
-  
-  
-  
-  
   mutate(is_legendary = factor(x = is_legendary, levels = c("Legendary", "Common"))) %>% 
   group_by(generation, is_legendary) %>% 
   summarise(
@@ -94,6 +79,14 @@ pokemon_df %>%
       y = "Count",
       x = "Generation"
     )
+
+
+ggsave(
+  filename = here::here("imgs","legendary_by_gen_plt.png"),
+  plot = legendary_by_gen_plt,
+  height = 8,
+  width = 10)
+
 ```
 
 
