@@ -54,7 +54,7 @@ The objective here is to enventually build a series of models that will
 predict the likelihood of the pokemon being legendary. The figure below
 shows the count of legendary pokemon through each generation.
 
-<img src="C:/Users/Jordan/Desktop/project_repository/pokemon/imgs/legendary_by_gen_plt.png" width="3000" style="display: block; margin: auto;" />
+<img src="C:/Users/Jordan/Desktop/project_repository/pokemon/imgs/legendary_by_gen_plt.png" width="500px" height="400px" style="display: block; margin: auto;" />
 
 ## Modeling
 
