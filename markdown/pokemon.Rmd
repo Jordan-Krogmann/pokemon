@@ -27,22 +27,39 @@ library(gt)        # clean summary tablss
 ```
 
 ```{r data-pull, message=FALSE, warning=FALSE}
+# pokemon_df <- read_csv(
+#   "https://raw.githubusercontent.com/Jordan-Krogmann/pokemon/master/data/pokemon.csv"
+#   ) %>% 
+#   as_tibble() %>% 
+#   mutate(type2 = case_when(
+#     is.na(type2)~ "none",
+#     TRUE ~ type2
+#     )
+#   )
+
 pokemon_df <- read_csv(
-  "https://raw.githubusercontent.com/Jordan-Krogmann/pokemon/master/data/pokemon.csv"
-  ) %>% 
-  as_tibble() %>% 
-  mutate(type2 = case_when(
-    is.na(type2)~ "none",
+  here::here("data", "pokemon.csv")
+) %>% 
+as_tibble() %>% 
+mutate(
+  type2 = case_when(
+    is.na(type2) ~ "none",
     TRUE ~ type2
-    )
   )
+) %>% 
+mutate(
+  two_types_flag = case_when(
+    type2 == "none" ~ 0,
+    TRUE ~ 1
+  )
+)
 ```
 
 ## EDA
 
 To mimic their project I guess they use tree-based models to predict wether or not a Pokemon is legendary.
 
-It seems they got legendary happy in the 7-generation of Pokemon... Not sure what games those are since I haven't played since *Pokemon Red*.
+It seems they got legendary happy in the 7-generation of Pokemon... Not sure what games those are since I haven't played since **Pokemon Red**.
 
 ```{r generation-legendary, fig.align='center', fig.height=8, fig.width=12}
 pokemon_df %>% 
@@ -50,6 +67,11 @@ pokemon_df %>%
       is_legendary == 1 ~ "Legendary",
       is_legendary == 0 ~ "Common"
   )) %>% 
+  
+  
+  
+  
+  
   mutate(is_legendary = factor(x = is_legendary, levels = c("Legendary", "Common"))) %>% 
   group_by(generation, is_legendary) %>% 
   summarise(
@@ -62,7 +84,7 @@ pokemon_df %>%
       axis.text = element_text(face = "bold", size = 14),
       axis.title = element_text(face = "bold", size = 14),
       # axis.text.x = element_text(angle = 45, hjust = 1),
-      plot.title = element_text(face = "bold", size = 16, hjust = .5),
+      plot.title = element_text(face = "bold", size = 18, hjust = .5),
       legend.position = c(.95,.9),
       legend.background = element_rect(color = "white")
       
@@ -78,30 +100,42 @@ pokemon_df %>%
 If you look at legendary count type one it looks like 
 ```{r plot-type-legendary, fig.align='center', fig.height=8, fig.width=12}
 pokemon_df %>% 
-  group_by(type1) %>% 
-  summarise(
-    count_total = n(),
-    count_legendary = sum(is_legendary),
-    percent_legendary = sum(is_legendary)/ n()
+  select(type1, type2, is_legendary) %>% 
+  pivot_longer(
+    cols = c(type1, type2),
+    names_to = "type_primary",
+    values_to = "type_description"
   ) %>% 
-  ggplot(aes(x = reorder(type1, percent_legendary),y = percent_legendary))  +
-    geom_col(aes(fill = type1), color = "black") + 
-    scale_y_continuous(breaks = seq(0, .4, by = .1), labels = percent) +
-    expand_limits(y = .4) + 
-    theme_minimal() + 
-    theme(
-      axis.text = element_text(face = "bold", size = 14),
-      axis.title = element_text(face = "bold", size = 14),
-      axis.text.x = element_text(angle = 45, hjust = 1),
-      plot.title = element_text(face = "bold", size = 16, hjust = .5),
-      legend.position = "none"
-    ) + 
-    labs(
-      title = "Percent of Legendary Pokemon by Type",
-      # subtitle = "",
-      y = "Percent",
-      x = ""
-    )
+  filter(
+    type_description != "none"
+  )
+  
+  
+  # group_by(type1, type2) %>% 
+  # summarise(
+  #   count_total = n(),
+  #   count_legendary = sum(is_legendary),
+  #   # percent_legendary = sum(is_legendary)/ n()
+  # ) %>% 
+  # ungroup()
+  # ggplot(aes(x = reorder(type1, percent_legendary),y = percent_legendary))  +
+  #   geom_col(aes(fill = type1), color = "black") + 
+  #   scale_y_continuous(breaks = seq(0, .4, by = .1), labels = percent) +
+  #   expand_limits(y = .4) + 
+  #   theme_minimal() + 
+  #   theme(
+  #     axis.text = element_text(face = "bold", size = 14),
+  #     axis.title = element_text(face = "bold", size = 14),
+  #     axis.text.x = element_text(angle = 45, hjust = 1),
+  #     plot.title = element_text(face = "bold", size = 16, hjust = .5),
+  #     legend.position = "none"
+  #   ) + 
+  #   labs(
+  #     title = "Percent of Legendary Pokemon by Type",
+  #     # subtitle = "",
+  #     y = "Percent",
+  #     x = ""
+  # )
     
 ```
 
@@ -121,26 +155,25 @@ test_df <- pokemon_df %>% filter(generation == 7)%>%
   )
 ```
 
-```{r}
-train_df %>% summary()
-```
-
-
 ```{r model-recipe}
 # model recipe
 poke_recipe <- recipe(is_legendary ~ . , data = train_df)
 ```
 
-```{r model-caret}
-train(
-  formula = is_legendary ~ .,
-  na.action = na.pass,
-  data = train_df,
-  method = "rf"
-)
 
-
+```{r}
+rf_with_seed <- 
+  rand_forest(trees = 2000, mtry = varying(), mode = "classification") %>%
+  set_engine("ranger", seed = 63233)
+rf_with_seed
 ```
 
+
+```{r}
+rand_forest(mtry = 12, trees = 2000) %>%
+  set_engine("randomforest") %>%
+  set_mode(mode =  "classification") %>% 
+  fit(poke_recipe, data = train_df)
+```
 
 
