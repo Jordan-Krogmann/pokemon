@@ -23,7 +23,7 @@ library(tidymodels)# tidy model framework
 library(tidyverse) # plotting and data manipulation
 library(DALEX)     # easy model interpretation
 library(caret)     # model framework
-library(gt)        # clean summary tablss
+library(gt)        # clean summary tables
 ```
 
 ```{r data-pull, message=FALSE, warning=FALSE}
@@ -42,7 +42,28 @@ mutate(
     type2 == "none" ~ 0,
     TRUE ~ 1
   )
-)
+) %>% 
+  mutate(
+    bug_type =      case_when(type1  == "bug" | type2 == "bug" ~ 1, TRUE ~ 0),
+    dark_type =     case_when(type1  == "dark" | type2 == "dark" ~ 1, TRUE ~ 0),
+    dragon_type =   case_when(type1  == "dragon" | type2 == "dragon" ~ 1, TRUE ~ 0),
+    electric_type = case_when(type1  == "electric" | type2 == "electric" ~ 1, TRUE ~ 0),
+    fairy_type =    case_when(type1  == "fairy" | type2 == "fairy" ~ 1, TRUE ~ 0),
+    fighting_type = case_when(type1  == "fighting" | type2 == "fighting" ~ 1, TRUE ~ 0),
+    fire_type =     case_when(type1  == "fire" | type2 == "fire" ~ 1, TRUE ~ 0),
+    flying_type =   case_when(type1  == "flying" | type2 == "flying" ~ 1, TRUE ~ 0),
+    ghost_type =    case_when(type1  == "ghost" | type2 == "ghost" ~ 1, TRUE ~ 0),
+    grass_type =    case_when(type1  == "grass" | type2 == "grass" ~ 1, TRUE ~ 0),
+    ground_type =   case_when(type1  == "ground" | type2 == "ground" ~ 1, TRUE ~ 0),
+    ice_type =      case_when(type1  == "ice" | type2 == "ice" ~ 1, TRUE ~ 0),
+    normal_type =   case_when(type1  == "normal" | type2 == "normal" ~ 1, TRUE ~ 0),
+    poison_type =   case_when(type1  == "poison" | type2 == "poison" ~ 1, TRUE ~ 0),
+    psychic_type =  case_when(type1  == "psychic" | type2 == "psychic" ~ 1, TRUE ~ 0),
+    rock_type = case_when(type1  == "rock" | type2 == "rock" ~ 1, TRUE ~ 0),
+    steel_type = case_when(type1  == "steel" | type2 == "steel" ~ 1, TRUE ~ 0),
+    water_type = case_when(type1  == "water" | type2 == "water" ~ 1, TRUE ~ 0),
+    
+  )
 ```
 
 ## EDA
@@ -90,51 +111,19 @@ ggsave(
 ```
 
 
-If you look at legendary count type one it looks like 
-```{r plot-type-legendary, fig.align='center', fig.height=8, fig.width=12}
-pokemon_df %>% 
-  select(type1, type2, is_legendary) %>% 
-  pivot_longer(
-    cols = c(type1, type2),
-    names_to = "type_primary",
-    values_to = "type_description"
-  ) %>% 
-  filter(
-    type_description != "none"
-  )
-  
-  
-  # group_by(type1, type2) %>% 
-  # summarise(
-  #   count_total = n(),
-  #   count_legendary = sum(is_legendary),
-  #   # percent_legendary = sum(is_legendary)/ n()
-  # ) %>% 
-  # ungroup()
-  # ggplot(aes(x = reorder(type1, percent_legendary),y = percent_legendary))  +
-  #   geom_col(aes(fill = type1), color = "black") + 
-  #   scale_y_continuous(breaks = seq(0, .4, by = .1), labels = percent) +
-  #   expand_limits(y = .4) + 
-  #   theme_minimal() + 
-  #   theme(
-  #     axis.text = element_text(face = "bold", size = 14),
-  #     axis.title = element_text(face = "bold", size = 14),
-  #     axis.text.x = element_text(angle = 45, hjust = 1),
-  #     plot.title = element_text(face = "bold", size = 16, hjust = .5),
-  #     legend.position = "none"
-  #   ) + 
-  #   labs(
-  #     title = "Percent of Legendary Pokemon by Type",
-  #     # subtitle = "",
-  #     y = "Percent",
-  #     x = ""
-  # )
-    
-```
-
 ## Modeling
 
 ```{r modeling-data}
+
+# set.seed(1234)
+# pokemon_split <- attendance_df %>%
+#   initial_split(strata = playoffs)
+# 
+# pokemon_train <- training(attendance_split)
+# pokemon_test <- testing(attendance_split)
+
+pokemon_df %>% names()
+
 # training data frame
 train_df <- pokemon_df %>% filter(generation != 7) %>% 
   select(
@@ -152,6 +141,19 @@ test_df <- pokemon_df %>% filter(generation == 7)%>%
 # model recipe
 poke_recipe <- recipe(is_legendary ~ . , data = train_df)
 ```
+recipe(volcano_type ~ ., data = volcano_df) %>%
+  update_role(volcano_number, new_role = "Id") %>%
+  step_other(tectonic_settings) %>%
+  step_other(major_rock_1) %>%
+  step_dummy(tectonic_settings, major_rock_1) %>%
+  step_zv(all_predictors()) %>%
+  step_normalize(all_predictors()) %>%
+  step_smote(volcano_type)
+
+```{r}
+recipe(is_legendary ~ . , data = train_df)
+```
+
 
 
 ```{r}
@@ -164,7 +166,7 @@ rf_with_seed
 
 ```{r}
 rand_forest(mtry = 12, trees = 2000) %>%
-  set_engine("randomforest") %>%
+  set_engine("ranger") %>%
   set_mode(mode =  "classification") %>% 
   fit(poke_recipe, data = train_df)
 ```
