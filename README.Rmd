@@ -56,12 +56,9 @@ pokemon_df <- read_csv(
 
 The objective here is to enventually build a series of models that will predict the likelihood of the pokemon being legendary.  The figure below shows the count of legendary pokemon through each generation.
 
-```{r fig.align='center', out.height="400px", out.width="500px"}
-knitr::include_graphics(
-  path = here::here("imgs", "legendary_by_gen_plt.png")
-)
-```
 
+
+![](imgs/legendary_by_gen_plt.png)
 
 ## Modeling
 
