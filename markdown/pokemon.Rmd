@@ -21,9 +21,6 @@ Dev Needs
 ```{r load-packages , message=FALSE, warning=FALSE}
 library(tidymodels)# tidy model framework
 library(tidyverse) # plotting and data manipulation
-library(DALEX)     # easy model interpretation
-library(caret)     # model framework
-library(gt)        # clean summary tables
 ```
 
 ```{r data-pull, message=FALSE, warning=FALSE}
@@ -105,8 +102,8 @@ legendary_by_gen_plt <- pokemon_df %>%
 ggsave(
   filename = here::here("imgs","legendary_by_gen_plt.png"),
   plot = legendary_by_gen_plt,
-  height = 8,
-  width = 10)
+  height = 6,
+  width = 12)
 
 ```
 
