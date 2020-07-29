@@ -13,8 +13,7 @@ create_model_work_flow_func <- function(
     is_legendary ~.,
     data = df
   ) %>% 
-    recipes::update_role(studentid, new_role = "ID") %>% 
-    recipes::step_dummy(all_predictors(), -all_numeric())
+  recipes::step_dummy(all_predictors(), -all_numeric())
   
   # ----- create model specification ----- 
   mod_spec <- parsnip::logistic_reg() %>% 
